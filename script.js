@@ -19,7 +19,7 @@ class GaltonBoard {
         // 물리 상수
         this.gravity = 0.3;
         this.friction = 0.95;
-        this.bounceForce = 0.8;
+        this.bounceForce = 0.4;
         
         // 색상 팔레트
         this.colors = [
@@ -183,6 +183,10 @@ class GaltonBoard {
             ball.x += ball.vx;
             ball.y += ball.vy;
             
+            // 공기 저항 (마찰력) 적용
+            ball.vx *= 0.98;
+            ball.vy *= 0.99;
+            
             // 궤적 추가
             ball.trail.push({ x: ball.x, y: ball.y });
             if (ball.trail.length > 5) {
@@ -205,15 +209,15 @@ class GaltonBoard {
                     ball.y += Math.sin(angle) * overlap;
                     
                     // 반사 속도 계산
-                    const bounceAngle = angle + (Math.random() - 0.5) * 0.5;
+                    const bounceAngle = angle + (Math.random() - 0.5) * 0.3;
                     const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
                     
                     ball.vx = Math.cos(bounceAngle) * speed * this.bounceForce;
                     ball.vy = Math.sin(bounceAngle) * speed * this.bounceForce;
                     
-                    // 최소 수평 속도 보장
-                    if (Math.abs(ball.vx) < 1) {
-                        ball.vx = (Math.random() > 0.5 ? 1 : -1) * 2;
+                    // 최소 수평 속도 보장 (더 부드럽게)
+                    if (Math.abs(ball.vx) < 0.5) {
+                        ball.vx = (Math.random() > 0.5 ? 0.5 : -0.5) * 1.5;
                     }
                     
                     ball.bounceCount++;
@@ -223,11 +227,11 @@ class GaltonBoard {
             // 벽과의 충돌
             if (ball.x - ball.radius < 50) {
                 ball.x = 50 + ball.radius;
-                ball.vx = Math.abs(ball.vx) * 0.8;
+                ball.vx = Math.abs(ball.vx) * 0.5;
             }
             if (ball.x + ball.radius > this.width - 50) {
                 ball.x = this.width - 50 - ball.radius;
-                ball.vx = -Math.abs(ball.vx) * 0.8;
+                ball.vx = -Math.abs(ball.vx) * 0.5;
             }
             
             // 빈에 도달했는지 확인
