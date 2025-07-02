@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 갈톤보드 - 이항분포 실험</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎯 갈톤보드 실험</h1>
+            <p>공들이 핀을 맞으며 떨어지는 모습을 관찰해보세요!</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="ballCount">🏀 공의 개수:</label>
+                <input type="range" id="ballCount" min="1" max="100" value="10">
+                <span id="ballCountValue">10</span>
+            </div>
+            
+            <div class="control-group">
+                <label for="speed">⚡ 떨어지는 속도:</label>
+                <input type="range" id="speed" min="1" max="5" value="3">
+                <span id="speedValue">3</span>
+            </div>
+
+            <div class="buttons">
+                <button id="startBtn" class="btn primary">🚀 시작하기</button>
+                <button id="resetBtn" class="btn secondary">🔄 다시하기</button>
+                <button id="pauseBtn" class="btn tertiary">⏸️ 일시정지</button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <canvas id="galtonBoard" width="800" height="600"></canvas>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">떨어진 공:</span>
+                    <span id="droppedCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">진행률:</span>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>🧮 이항분포란?</h3>
+            <p>공들이 핀에 부딪히며 좌우로 무작위로 떨어집니다. 많은 공을 떨어뜨리면 종 모양의 정규분포가 나타나요!</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
