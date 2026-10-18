@@ -58,7 +58,9 @@ body{font-family:Pre,sans-serif;color:var(--ink);-webkit-font-smoothing:antialia
 .canvas{position:absolute;background-color:#fff;background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:68px 68px;border-radius:6px}
 #eq{position:absolute;white-space:nowrap;display:flex;align-items:center}
 .tok{display:inline-block}
-.touch{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:rgba(48,89,216,.22);border:4px solid rgba(48,89,216,.7)}
+.pen{position:absolute;width:0;height:0;pointer-events:none}
+.pen svg{position:absolute;left:-20px;top:0;transform-origin:20px 0;transform:rotate(-35deg);filter:drop-shadow(6px 10px 8px rgba(26,34,51,.25))}
+.touch{position:absolute;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:rgba(48,89,216,.22);border:4px solid rgba(48,89,216,.7)}
 #dark{background:radial-gradient(120% 90% at 50% 45%,#222B44 0%,#141A2C 60%,#0E1220 100%)}
 #darkGrid{background-image:linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px);background-size:68px 68px}
 #ans66{position:absolute;color:#fff;text-shadow:0 0 30px rgba(160,190,255,.8)}
@@ -80,7 +82,7 @@ body{font-family:Pre,sans-serif;color:var(--ink);-webkit-font-smoothing:antialia
 .blab{position:absolute;font-family:KMain,serif;text-align:right;white-space:nowrap}
 .note{position:absolute;font-weight:800;color:var(--coralText);white-space:nowrap}
 #newCard{position:absolute;background:#fff;border-radius:30px;border:2px solid var(--line);box-shadow:0 30px 80px -30px rgba(26,34,51,.25);overflow:hidden}
-.spec{background:linear-gradient(90deg,var(--blue),var(--green) 35%,var(--amber) 65%,var(--coral))}
+.spec{background:linear-gradient(90deg,var(--blue),var(--coral) 35%,var(--green) 65%,var(--amber))}
 .hint{position:absolute;font-weight:700;color:#2B3445;white-space:nowrap}
 .check{position:absolute;width:84px;height:84px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px -8px rgba(29,154,108,.6)}
 .cap{position:absolute;font-weight:800;color:#13734F;white-space:nowrap}
@@ -145,6 +147,7 @@ const prismSVG=(s,id,paper)=>`<svg width="${s}" height="${s}" viewBox="-60 -60 1
  <defs><linearGradient id="pg${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${paper?'#DCE6FF':'#9DB6FF'}" stop-opacity="${paper?1:.5}"/><stop offset=".6" stop-color="${paper?'#EEF3FF':'#3059D8'}" stop-opacity="${paper?1:.2}"/><stop offset="1" stop-color="#fff" stop-opacity="${paper?1:.3}"/></linearGradient></defs>
  <path d="M0 -52 L45 26 L-45 26 Z" fill="url(#pg${id})" stroke="${paper?'#3059D8':'#C9D7FF'}" stroke-width="${paper?3.2:2.6}" stroke-linejoin="round"/>
  <path d="M-2 -46 L-40 22" stroke="#fff" stroke-opacity="${paper?.9:.55}" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+const PEN=`<svg width="40" height="230" viewBox="0 0 40 230"><path d="M20 0 L31 26 H9 Z" fill="#C9CED8"/><circle cx="20" cy="2" r="2.5" fill="#1A2233"/><rect x="8" y="25" width="24" height="14" rx="3" fill="#8A93A3"/><rect x="8" y="38" width="24" height="192" rx="10" fill="#2B3445"/><rect x="12" y="44" width="5" height="170" rx="2.5" fill="#fff" fill-opacity=".18"/></svg>`;
 const BEAMS=[{c:'#769EFD',lab:'오류 위치',val:'분모 계산'},{c:'#F07479',lab:'오개념',val:'분모가 다른 채로 뺌'},{c:'#2FBF8A',lab:'확신도',val:'확신함 · 그런데 오답'},{c:'#F2B04D',lab:'사고 수준',val:'통분 이해 이전'}];
 
 // ------------------------------------------------------------- layouts
@@ -155,7 +158,7 @@ const LY=V?{
   confq:[60,1134,30], opts:{x:60,y:1178,w:432,h:86,gx:16,gy:12,fs:26,row:true,cols:2}, submit:[60,1376,880,96,38],
   eqFont:96, camZoom:1.6, chipScale:1.45, chipPos:[500,1200], camC:[500,880],
   ans66:[220,420], ansScale:1.5, prism:[560,560,320], dq:[500,800,60],
-  cards:{x:60,w:880,h:128,ys:[960,1110,1260,1410],lab:30,val:44}, focusScale:1.08,
+  cards:{x:130,w:810,h:128,ys:[960,1110,1260,1410],lab:34,val:44}, focusScale:1.14,
   head:[500,380,58], eq2:[500,930], eqFont2:118, ann:72,
   bars:{x:200,w:740,h:160,ys:[700,950],lab:130,fs:60}, note:[500,1180,50], result:[500,1330,96],
   newCard:[60,500,880,660], npFont:96, npY:220, mini:{y:550,w:360,h:54,gap:60}, conf2:[500,1290,580,112,32], cap2:[500,1410,46],
@@ -167,7 +170,7 @@ const LY=V?{
   confq:[44,640,30], opts:{x:44,y:690,w:152,h:140,gx:8,gy:0,fs:19,row:false,cols:4}, submit:[1730,18,166,84,34],
   eqFont:80, camZoom:2.25, chipScale:1.75, chipPos:[1290,905], camC:[960,540],
   ans66:[330,540], ansScale:1.6, prism:[800,560,440], dq:[800,215,64],
-  cards:{x:1180,w:640,h:140,ys:[300,460,620,780],lab:30,val:46}, focusScale:1.1,
+  cards:{x:1180,w:640,h:140,ys:[300,460,620,780],lab:30,val:46}, focusScale:1.18,
   head:[960,140,62], eq2:[960,640], eqFont2:128, ann:80,
   bars:{x:660,w:900,h:140,ys:[300,510],lab:140,fs:66}, note:[1110,710,50], result:[960,850,100],
   newCard:[460,110,1000,690], npFont:110, npY:220, mini:{y:560,w:400,h:58,gap:80}, conf2:[790,900,420,120,30], cap2:[1240,900,48],
@@ -205,13 +208,16 @@ if(LY.tools){
 }
 const canvas=box(el('div','canvas',null,ui),...LY.canvas);
 const eq=el('div','hand',null,canvas,{fontSize:LY.eqFont+'px'});eq.id='eq';
-eq.innerHTML=`<span class="tok">${frac(7,10)}</span><span class="tok op">−</span><span class="tok">${frac(1,4)}</span><span class="tok op">=</span><span class="tok" id="t5">${frac('6','<span id="d6">6</span>')}</span>`;
+eq.innerHTML=`<span class="tok">${frac(7,10)}</span><span class="tok op">−</span><span class="tok">${frac(1,4)}</span><span class="tok op">=</span><span class="tok" id="t5">${frac('<span id="n6">6</span>','<span id="d6">6</span>')}</span>`;
 const eqW=eq.offsetWidth, eqH=eq.offsetHeight;box(eq,(LY.canvas[2]-eqW)/2,(LY.canvas[3]-eqH)/2);
 const t5=$('#t5');const c6=off(t5,canvas);const cw=t5.offsetWidth, ch=t5.offsetHeight;
-const CW2=Math.max(cw*1.75,ch*0.78), CH2=ch*1.2;
-const circ=el('div','abs',`<svg width="${CW2}" height="${CH2}" viewBox="0 0 220 155" preserveAspectRatio="none" style="overflow:visible"><path id="circP" d="M150 18 C 95 0, 22 18, 16 72 C 10 128, 92 152, 150 140 C 205 128, 215 70, 186 34 C 170 16, 130 6, 104 14" fill="none" stroke="#E0565B" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`,canvas);
-box(circ,c6.x+cw/2-CW2/2,c6.y+ch/2-CH2/2);
-const circP=$('#circP');const circL=circP.getTotalLength();
+// wrong = a red 빗금 (slash) through the answer; a circle would read as 정답 to Korean parents
+const slash=el('div','abs',`<svg width="${cw}" height="${ch}" style="overflow:visible"><path id="slashP" d="M${cw*1.15} ${-ch*0.08} Q ${cw*0.55} ${ch*0.45} ${-cw*0.15} ${ch*1.08}" fill="none" stroke="#E0565B" stroke-width="7" stroke-linecap="round"/></svg>`,canvas);
+box(slash,c6.x,c6.y);
+const slashP=$('#slashP');const slashL=slashP.getTotalLength();
+const pen1=el('div','pen',PEN,canvas);
+const pn6=off($('#n6'),canvas),pd6=off($('#d6'),canvas),pb6=off(t5.querySelector('.bar'),canvas);
+const n6e=$('#n6'),d6e=$('#d6');
 const sixUI=off(t5,ui);const SIX={x:sixUI.x+cw/2,y:sixUI.y+ch/2};
 const eqUI=off(eq,ui);const EQC={x:eqUI.x+eqW/2,y:eqUI.y+eqH/2};
 const conf=$('#confFloat');conf.className='opt o1'+(O.row?' row':'')+' abs';conf.innerHTML=optHTML(OPTS[0],O.row,O.row?38:44);
@@ -232,11 +238,13 @@ box(beam,AX,AY,bl);
 const dq=$('#dq');dq.style.fontSize=LY.dq[2]+'px';box(dq,LY.dq[0]-dq.offsetWidth/2,LY.dq[1]-dq.offsetHeight/2);
 const SVGNS='http://www.w3.org/2000/svg';
 const rays=$('#rays');
+const mkPath=(d,c,w)=>{const p=document.createElementNS(SVGNS,'path');[['d',d],['stroke',c],['stroke-width',w],['fill','none'],['stroke-linecap','round'],['stroke-linejoin','round']].forEach(([k,v])=>p.setAttribute(k,v));rays.appendChild(p);return{l:p,L:p.getTotalLength()}};
 const mkLine=(x1,y1,x2,y2,c,w)=>{const l=document.createElementNS(SVGNS,'line');[['x1',x1],['y1',y1],['x2',x2],['y2',y2],['stroke',c],['stroke-width',w],['stroke-linecap','round']].forEach(([k,v])=>l.setAttribute(k,v));rays.appendChild(l);return{l,L:Math.hypot(x2-x1,y2-y1)}};
 const inner=mkLine(entry.x,entry.y,exit.x,exit.y+4*u,'#fff',6);inner.l.style.filter='drop-shadow(0 0 8px #fff)';
 const CD=LY.cards;const dcards=$('#dcards');const rayEls=[],cardEls=[];
 BEAMS.forEach((b,i)=>{
-  const ty=CD.ys[i];const r=mkLine(exit.x,exit.y+(i-1.5)*3*u,CD.x+6,ty,b.c,V?7:9);r.l.style.filter=`drop-shadow(0 0 10px ${b.c})`;rayEls.push(r);
+  const ty=CD.ys[i];const ey=exit.y+(i-1.5)*3*u;
+  const r=V?mkPath(`M${exit.x} ${ey} L ${70+i*14} ${CD.ys[0]-CD.h/2-60+i*10} L ${70+i*14} ${ty-12} Q ${70+i*14} ${ty} ${84+i*14} ${ty} L ${CD.x+6} ${ty}`,b.c,7):mkLine(exit.x,ey,CD.x+6,ty,b.c,9);r.l.style.filter=`drop-shadow(0 0 10px ${b.c})`;rayEls.push(r);
   cardEls.push(box(el('div','dcard',`<div class="cbar" style="background:${b.c}"></div><div class="lab" style="color:${b.c};font-size:${CD.lab}px;padding-left:44px">${b.lab}</div><div class="valwrap" style="padding-left:44px"><div class="val" style="font-size:${CD.val}px">${b.val}</div></div>`,dcards),CD.x,ty-CD.h/2,CD.w,CD.h));
 });
 const C2={x:CD.x+CD.w/2,y:CD.ys[1]};darkInner.style.transformOrigin=`${C2.x}px ${C2.y}px`;
@@ -247,9 +255,9 @@ const headA=$('#headA'), headB=$('#headB');
 headA.textContent=BEAMS[1].val;headB.textContent='같은 크기로 쪼개면';
 [headA,headB].forEach(e=>{e.style.fontSize=LY.head[2]+'px';box(e,LY.head[0]-e.offsetWidth/2,LY.head[1]-e.offsetHeight/2)});
 const eqG=$('#eqGroup');
-eqG.innerHTML=`<div id="eqP" class="math" style="font-size:${LY.eqFont2}px;display:flex;align-items:center;white-space:nowrap">
+eqG.innerHTML=`<div id="eqP" class="hand" style="font-size:${LY.eqFont2}px;display:flex;align-items:center;white-space:nowrap">
   <span class="tok" id="p1">${frac('<span id="pn1">7</span>','<span id="pd1">10</span>')}</span><span class="op">−</span><span class="tok" id="p2">${frac('<span id="pn2">1</span>','<span id="pd2">4</span>')}</span><span class="op">=</span>
-  <span class="tok hand" id="p66" style="font-size:1.12em">${frac('6','6')}</span></div>`;
+  <span class="tok" id="p66">${frac('6','6')}</span></div>`;
 const eqP=$('#eqP');const EPW=eqP.offsetWidth, EPH=eqP.offsetHeight;
 box(eqG,LY.eq2[0]-EPW/2,LY.eq2[1]-EPH/2,EPW,EPH);
 function ctr(id){const o=off($(id),eqG);const e=$(id);return{x:o.x+e.offsetWidth/2,y:o.y,y2:o.y+e.offsetHeight}}
@@ -274,6 +282,7 @@ function makeBar(y,n,fill,col,tint,sub){
 const barA=makeBar(BR.ys[0],10,7,'#3059D8','#EAF0FF',2), barB=makeBar(BR.ys[1],4,1,'#E39A2D','#FDF6E8',5);
 const blab=(f,y)=>box(el('div','blab',f,BG,{fontSize:BR.fs+'px'}),BR.x-BR.lab-30,y+BR.h/2-BR.fs,BR.lab);
 const labA=blab(frac(7,10),BR.ys[0]), labA2=blab(frac(14,20),BR.ys[0]), labB=blab(frac(1,4),BR.ys[1]), labB2=blab(frac(5,20),BR.ys[1]);
+const labA3=blab(frac(9,20),BR.ys[0]);labA3.style.color='#157A55';gsap.set(labA3,{opacity:0});
 const cwA=BR.w/10, cwB=BR.w/4;
 el('div','abs',`<svg width="${W}" height="${H}" style="position:absolute;left:0;top:0;overflow:visible">
  <path id="bA" d="M${BR.x+3} ${BR.ys[0]-14} v-18 h${cwA-6} v18" fill="none" stroke="#E0565B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -284,7 +293,7 @@ const chunk=box(el('div','abs',null,BG,{background:'#E39A2D',borderRadius:'6px'}
 for(let k=1;k<5;k++)box(el('div','sub',null,chunk,{background:'rgba(255,255,255,.95)'}),k*BR.w/20-1,0);
 const hole=box(el('div','abs',null,BG,{background:'#EAF0FF'}),BR.x+3+BR.w*0.45,BR.ys[0]+3,BR.w*0.25,BR.h-6);
 for(let k=0;k<5;k++)box(el('div','sub',null,hole,{background:'#3059D855'}),k*BR.w/20-1,0);
-const res=$('#result');res.innerHTML=`<div class="math" style="font-size:${LY.result[2]}px;display:flex;align-items:center;white-space:nowrap">${frac(7,10)}<span class="op">−</span>${frac(1,4)}<span class="op">=</span><span id="r920" style="color:#1D9A6C;display:inline-block">${frac(9,20)}</span></div>`;
+const res=$('#result');res.innerHTML=`<div class="math" style="font-size:${LY.result[2]}px;display:flex;align-items:center;white-space:nowrap">${frac(7,10)}<span class="op">−</span>${frac(1,4)}<span class="op">=</span><span id="r920" style="color:#157A55;display:inline-block">${frac(9,20)}</span></div>`;
 box(res,LY.result[0]-res.offsetWidth/2,LY.result[1]-res.offsetHeight/2);
 // new problem card
 const NC=$('#newCard');const NCL=LY.newCard;box(NC,...NCL);
@@ -295,9 +304,10 @@ NC.innerHTML=`<div id="spec" class="spec abs" style="left:0;top:0;height:12px"><
  <div id="np" class="math" style="position:absolute;font-size:${LY.npFont}px;display:flex;align-items:center;white-space:nowrap">${frac(3,5)}<span class="op">−</span>${frac(1,2)}<span class="op">=</span>
    <div id="nbox" style="position:relative;width:${LY.npFont*1.9}px;height:${LY.npFont*2.25}px;border:4px solid #1A2233;border-radius:18px;display:flex;align-items:center;justify-content:center">
      <div id="ans110" class="hand" style="font-size:${LY.npFont}px">${frac('<span id="a1">1</span>','<span id="a10">10</span>')}</div></div></div>
- <div id="chk" class="check"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>`;
+ <div id="chk" class="abs"><svg width="${LY.npFont*2.2}" height="${LY.npFont*2.35}" viewBox="0 0 220 155" preserveAspectRatio="none" style="overflow:visible"><path id="okP" d="M150 18 C 95 0, 22 18, 16 72 C 10 128, 92 152, 150 140 C 205 128, 215 70, 186 34 C 170 16, 130 6, 104 14" fill="none" stroke="#E0565B" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></div>`;
 const np=$('#np');box(np,(NCL[2]-np.offsetWidth)/2,LY.npY);
-const nbox=$('#nbox');const nbo=off(nbox,NC);box($('#chk'),nbo.x+nbox.offsetWidth-44,nbo.y-40);
+const nbox=$('#nbox');const nbo=off(nbox,NC);box($('#chk'),nbo.x+nbox.offsetWidth/2-LY.npFont*1.1,nbo.y+nbox.offsetHeight/2-LY.npFont*1.175);
+const pen2=el('div','pen',PEN,NC);const a1o=off($('#a1'),NC),a10o=off($('#a10'),NC);
 // mini bars inside the card: 3/5 -> 6/10 and 1/2 -> 5/10
 const miniX0=(NCL[2]-(MI.w*2+MI.gap))/2;
 function miniBar(x,n,fill,col,tint,sub){const row=box(el('div','barrow',null,NC,{borderColor:col,background:tint,borderRadius:'10px'}),x,MI.y,MI.w,MI.h);
@@ -315,7 +325,7 @@ const END=$('#endIn');const E=LY.end;END.style.transformOrigin=`${CX}px ${CY}px`
 const GS=E.glyph[2];
 const glyph=el('div','abs',prismSVG(GS,'b',true)+`<svg class="abs" style="left:0;top:0;overflow:visible" width="${GS}" height="${GS}" viewBox="-60 -60 120 120">
  <line id="gIn" x1="-78" y1="-4" x2="-22.5" y2="-13" stroke="#3059D8" stroke-width="3.4" stroke-linecap="round"/>
- <g id="gRays" stroke-width="3.6" stroke-linecap="round"><line x1="22.5" y1="-15" x2="66" y2="-36" stroke="#3059D8"/><line x1="22.5" y1="-13" x2="70" y2="-17" stroke="#1D9A6C"/><line x1="22.5" y1="-11" x2="70" y2="2" stroke="#E39A2D"/><line x1="22.5" y1="-9" x2="64" y2="20" stroke="#E0565B"/></g></svg>`,END);
+ <g id="gRays" stroke-width="3.6" stroke-linecap="round"><line x1="22.5" y1="-15" x2="66" y2="-36" stroke="#3059D8"/><line x1="22.5" y1="-13" x2="70" y2="-17" stroke="#E0565B"/><line x1="22.5" y1="-11" x2="70" y2="2" stroke="#1D9A6C"/><line x1="22.5" y1="-9" x2="64" y2="20" stroke="#E39A2D"/></g></svg>`,END);
 const word=el('div','word','<span style="font-weight:900;color:#3059D8;letter-spacing:-.02em">PRISM</span>',END,{fontSize:E.word[2]+'px'});
 const sub=el('div','word','<span style="font-weight:800;color:#1A2233">분수 진단</span>',END,{fontSize:E.sub[2]+'px'});
 const tag=el('div','word','<span style="font-weight:700;color:#1A2233">답 너머의 생각까지</span>',END,{fontSize:E.tag[2]+'px'});
@@ -354,29 +364,42 @@ if(V){const f=$('#focus');const z=LY.camZoom,g=68*z;
   const band=(top,hh,mask)=>`<div class="abs" style="left:0;top:${top}px;width:100%;height:${hh}px;background-color:#fff;background-image:${bgI};background-size:${g}px ${g}px;background-position:${gx}px ${gy-top}px;-webkit-mask-image:${mask}"></div>`;
   const ct=CY+(LY.canvas[1]-EQC.y)*z, cb=CY+(LY.canvas[1]+LY.canvas[3]-EQC.y)*z;
   f.innerHTML=band(0,ct+24,'linear-gradient(#000 calc(100% - 40px),transparent)')+band(cb-24,H-cb+24,'linear-gradient(transparent,#000 40px)');
-  to(h.pullback,f,{opacity:0,duration:0.45,ease:'power2.in'});}
+  to(h.pullback+0.08,f,{opacity:0,duration:0.14,ease:'power2.in'});}
 
 // --- S1: frame one = the finished work + the confident chip; the pen lands the last stroke
-gsap.set('#d6',{clipPath:'inset(0% 30% 0% 0%)'});
-to(0,'#d6',{clipPath:'inset(0% 0% 0% 0%)',duration:0.35,ease:'power1.out'});
-gsap.set(conf,{left:LY.chipPos[0]-O.w/2,top:LY.chipPos[1]-O.h/2,scale:LY.chipScale});
-to(0,conf,{y:-6,duration:0.8,ease:'sine.inOut'});
+const t5b=t5.querySelector('.bar');
+gsap.set(['#n6',t5b,'#d6'],{clipPath:'inset(0% 100% 0% 0%)'});gsap.set('#n6',{clipPath:'inset(0% 45% 0% 0%)'});
+to(0,'#n6',{clipPath:'inset(0% 0% 0% 0%)',duration:0.16,ease:'none'});
+to(0.18,t5b,{clipPath:'inset(0% 0% 0% 0%)',duration:0.1,ease:'power1.inOut'});
+to(0.3,'#d6',{clipPath:'inset(0% 0% 0% 0%)',duration:0.3,ease:'power1.inOut'});
+// the stylus rides the strokes, then lifts away
+const pS=1/LY.camZoom*1.25;
+gsap.set(pen1,{left:pn6.x+n6e.offsetWidth*0.6,top:pn6.y+n6e.offsetHeight*0.55,scale:pS});
+to(0,pen1,{left:pn6.x+n6e.offsetWidth*0.5,top:pn6.y+n6e.offsetHeight*0.85,duration:0.16,ease:'sine.inOut'});
+to(0.16,pen1,{left:pb6.x+t5b.offsetWidth,top:pb6.y,duration:0.14,ease:'power1.inOut'});
+to(0.3,pen1,{left:pd6.x+d6e.offsetWidth*0.3,top:pd6.y+d6e.offsetHeight*0.3,duration:0.12,ease:'power1.inOut'});
+to(0.42,pen1,{left:pd6.x+d6e.offsetWidth*0.6,top:pd6.y+d6e.offsetHeight*0.8,duration:0.18,ease:'sine.inOut'});
+to(0.62,pen1,{left:'+=60',top:'+=140',opacity:0,duration:0.4,ease:'power2.in'});
+gsap.set(conf,{left:LY.chipPos[0]-O.w/2,top:LY.chipPos[1]-O.h/2,scale:LY.chipScale*0.6,opacity:0,y:50});
+ft(h.chipIn,conf,{scale:LY.chipScale*0.6,opacity:0,y:50},{scale:LY.chipScale,opacity:1,y:0,duration:0.5,ease:'back.out(1.8)'});
 gsap.set('#touch',{opacity:0,scale:0.4});
 const tap=(t,x,y)=>{set(t-0.2,'#touch',{left:x,top:y});ft(t-0.2,'#touch',{opacity:0,scale:1.5},{opacity:1,scale:0.6,duration:0.2,ease:'power2.in'});to(t,'#touch',{scale:2.4,opacity:0,duration:0.5,ease:'power2.out'})};
 tap(h.confTap,LY.chipPos[0]+(V?120:60),LY.chipPos[1]+8);
 to(h.confTap,conf,{scale:LY.chipScale*0.92,duration:0.08,ease:'power2.in'});
 set(h.confTap+0.08,conf,{className:conf.className+' sel'});
 to(h.confTap+0.08,conf,{scale:LY.chipScale,duration:0.55,ease:'elastic.out(1,0.45)'});
-to(h.confTap+0.7,conf,{y:4,duration:1.2,ease:'sine.inOut'});
+to(h.confTap+0.7,conf,{y:-6,duration:1.2,ease:'sine.inOut'});
 // --- S2: the circle closes, the answer turns coral, the camera pulls back to the real screen
-draw(h.circleStart,circP,circL,h.circleDone-h.circleStart);
-to(h.circleDone,'#t5',{color:'#E0565B',duration:0.15});
-to(h.circleDone,'#t5',{x:-6,duration:0.05,yoyo:true,repeat:3,ease:'sine.inOut'});
+draw(h.slash,slashP,slashL,h.slashDone-h.slash,'power3.in');
+to(h.slashDone,'#t5',{color:'#E0565B',duration:0.12});
+to(h.slashDone,'#t5',{x:-6,duration:0.05,yoyo:true,repeat:3,ease:'sine.inOut'});
 to(h.pullback,conf,{left:SLOT.x-O.w/2,scale:1,duration:0.8,ease:'expo.inOut'});
 to(h.pullback,conf,{top:SLOT.y-O.h/2,y:0,duration:0.8,ease:'power3.in'});
+to(h.pullback+0.15,conf,{filter:'blur(2.4px)',duration:0.25,ease:'power1.in'});to(h.pullback+0.4,conf,{filter:'blur(0px)',duration:0.35,ease:'power1.out'});
 hide(h.pullback+0.8,conf);set(h.pullback+0.8,optEls[0],{className:optEls[0].className+' sel'});
 const sb=off(submit,ui);const SUB={x:sb.x+LY.submit[2]/2,y:sb.y+LY.submit[3]/2};
 tap(h.submitTap,SUB.x+(V?150:0),SUB.y+6);
+to(h.pullback+0.8,cam,{s:1.04,cx:W/2+(SUB.x-W/2)*0.12,cy:H/2+(SUB.y-H/2)*0.12,duration:0.7,ease:'power2.inOut'});
 to(h.submitTap,submit,{scale:0.92,backgroundColor:'#1F3FA6',duration:0.08,ease:'power2.in'});
 to(h.submitTap+0.08,submit,{scale:1,backgroundColor:'#3059D8',duration:0.45,ease:'elastic.out(1,0.5)'});
 
@@ -409,6 +432,8 @@ rayEls.forEach((r,i)=>{gsap.set(r.l,{strokeDasharray:`${r.L} ${r.L+40}`,strokeDa
 gsap.set(dq,{opacity:0,y:30,clipPath:'inset(0% 0% 100% 0%)'});
 ft(h.question,dq,{opacity:0,y:30,clipPath:'inset(0% 0% 100% 0%)'},{opacity:1,y:0,clipPath:'inset(0% 0% 0% 0%)',duration:0.55,ease:'power3.out'});
 to(h.question+0.6,dq,{y:-6,duration:0.9,ease:'sine.inOut'});
+to(h.beamHit+0.7,prismWrap,{rotation:3,duration:1.6,ease:'sine.inOut'});to(h.card1,prismWrap,{rotation:0,duration:0.6,ease:'power2.out'});
+to(h.beamHit+0.98,'#pglow',{opacity:0.85,scale:1.1,duration:0.7,ease:'sine.inOut',yoyo:true,repeat:1});
 to(h.card1-0.25,dq,{opacity:0,y:-30,duration:0.3,ease:'power2.in'});
 // rays reach the cards in one quick staggered burst
 const cardT=[h.card1,h.card2,h.card3,h.card4];
@@ -433,14 +458,17 @@ show(h.toPaper,'#expander');
 set(h.toPaper,expBg,{left:C2.x-c2w/2,top:C2.y-c2h/2,width:c2w,height:c2h,backgroundColor:'#1D2438',borderRadius:20});
 set(h.toPaper,expVal,{left:v2x,top:v2y,fontSize:CD.val*FS,color:'#FFFFFF'});
 to(h.toPaper,expBg,{left:0,top:0,width:W,height:H,borderRadius:0,duration:0.55,ease:'expo.inOut'});
-to(h.toPaper,expBg,{backgroundColor:'#F5F7FB',duration:0.45,ease:'power2.in'});
+set(h.toPaper+0.5,expBg,{backgroundColor:'#F5F7FB'});
 const HDx=parseFloat(headA.style.left), HDy=parseFloat(headA.style.top);
 to(h.toPaper,expVal,{left:HDx,top:HDy,fontSize:LY.head[2],duration:0.55,ease:'expo.inOut'});
-to(h.toPaper+0.1,expVal,{color:'#C4373D',duration:0.35,ease:'power1.in'});
+set(h.toPaper+0.5,expVal,{color:'#C4373D'});
 hide(h.toPaper,cardEls[1]);
+const expLab=el('div','abs',BEAMS[1].lab,$('#expander'),{color:'#F07479',fontWeight:700,fontSize:CD.lab*FS+'px',whiteSpace:'nowrap'});
+const lab2=cardEls[1].querySelector('.lab');const l2o=off(lab2,cardEls[1]);
+gsap.set(expLab,{left:v2x,top:C2.y+(CD.ys[1]-CD.h/2+l2o.y-C2.y)*FS,opacity:0});show(h.toPaper,expLab);to(h.toPaper,expLab,{opacity:0,y:-30,duration:0.25,ease:'power2.in'});
 const P2=$('#paper2');gsap.set(P2,{opacity:0});
-show(h.toPaper+0.55,P2);hide(h.toPaper+0.56,['#expander',dark]);
-ft(h.toPaper+0.55,p2in,{scale:1},{scale:1.035,duration:h.newCard-h.toPaper-0.55,ease:'none'});
+show(h.toPaper+0.5,P2);hide(h.toPaper+0.52,['#expander',dark]);
+ft(h.toPaper+0.5,p2in,{scale:1},{scale:1.06,duration:h.newCard-h.toPaper-0.5,ease:'none'});
 gsap.set(headB,{opacity:0});
 // the equation arrives under the headline
 gsap.set(['#p1','#p2','#eqP .op'],{opacity:0,y:40});gsap.set('#p66',{opacity:0,scale:0.4});
@@ -465,7 +493,7 @@ ft(h.bars+0.22,barB.cells,{opacity:0},{opacity:1,duration:0.18,stagger:0.07,ease
 ft(h.bars+0.05,[labA,labB],{opacity:0,x:-20},{opacity:1,x:0,duration:0.5,stagger:0.12,ease:'power3.out'});
 ['#bA','#bB'].forEach((s,i)=>{const p=$(s);draw(h.sizeNote-0.3+i*0.1,p,p.getTotalLength(),0.3,'power2.out')});
 gsap.set(note,{opacity:0,y:24});ft(h.sizeNote,note,{opacity:0,y:24},{opacity:1,y:0,duration:0.5,ease:'back.out(1.6)'});
-to(h.sizeNote+0.5,[barA.cells[0],barB.cells[0]],{filter:'brightness(1.3)',duration:0.4,yoyo:true,repeat:1,ease:'sine.inOut'});
+ft(h.sizeNote+0.5,[barA.cells[0],barB.cells[0]],{filter:'brightness(1)'},{filter:'brightness(1.3)',duration:0.4,yoyo:true,repeat:1,ease:'sine.inOut'});
 // --- re-slice into twentieths; the headline turns from the mistake to the method
 to(h.reslice-0.2,[note,'#bA','#bB'],{opacity:0,duration:0.2,ease:'power2.in'});
 to(h.reslice-0.2,headA,{opacity:0,y:-30,duration:0.25,ease:'power2.in'});
@@ -479,15 +507,17 @@ ft(h.reslice+0.3,[labA2,labB2],{opacity:0,x:0,y:24},{opacity:1,y:0,duration:0.4,
 gsap.set([chunk,hole],{opacity:0});
 show(h.remove,chunk);set(h.remove,barB.cells[0],{backgroundColor:'transparent'});
 to(h.remove,chunk,{x:BR.w*0.45,y:BR.ys[0]-BR.ys[1],duration:0.45,ease:'power3.inOut'});
-show(h.remove+0.45,hole);to(h.remove+0.45,chunk,{opacity:0,y:'-=70',duration:0.3,ease:'power2.in'});
+ft(h.remove+0.42,hole,{opacity:0},{opacity:1,duration:0.3,ease:'power2.inOut'});to(h.remove+0.42,chunk,{opacity:0,duration:0.3,ease:'power2.inOut'});set(h.remove+0.75,chunk,{display:'none'});
+to(h.remove+0.45,labA2,{opacity:0,y:-24,duration:0.2,ease:'power2.in'});ft(h.remove+0.6,labA3,{opacity:0,y:24},{opacity:1,y:0,duration:0.35,ease:'power3.out'});
+to(h.remove+0.3,labB2,{opacity:0.3,duration:0.3});
 // result
 gsap.set(res,{opacity:0,y:30});
 ft(h.nineTwenty-0.1,res,{opacity:0,y:30},{opacity:1,y:0,duration:0.45,ease:'power3.out'});
 to(h.nineTwenty+0.1,'#r920',{scale:1.18,duration:0.18,ease:'power2.out'});to(h.nineTwenty+0.28,'#r920',{scale:1,duration:0.4,ease:'back.out(2)'});
 // --- S6: the page clears fully, then the card made for this child slides in
-to(h.newCard-0.32,p2in,{x:-W*0.3,opacity:0,duration:0.3,ease:'power3.in'});
-gsap.set(NC,{opacity:0,x:W*0.3,rotation:2});gsap.set('#spec',{width:0});
-ft(h.newCard,NC,{opacity:0,x:W*0.3,rotation:2},{opacity:1,x:0,rotation:0,duration:0.7,ease:'expo.out'});
+to(h.newCard-0.36,p2in,{x:-W*0.3,opacity:0,duration:0.28,ease:'power3.in'});
+gsap.set(NC,{opacity:0,x:W*0.75,rotation:2});gsap.set('#spec',{width:0});
+show(h.newCard-0.12,NC);ft(h.newCard-0.12,NC,{x:W*0.75,rotation:2},{x:0,rotation:0,duration:0.75,ease:'expo.out'});
 ft(h.newCard+0.2,'#spec',{width:0},{width:NCL[2],duration:0.7,ease:'power3.inOut'});
 gsap.set([...mA.subs,...mB.subs],{scaleY:0});
 ft(h.miniSlice,mA.subs,{scaleY:0},{scaleY:1,duration:0.25,stagger:0.05,ease:'power2.out'});
@@ -496,8 +526,13 @@ gsap.set(['#a1','#ans110 .bar','#a10'],{clipPath:'inset(0% 100% 0% 0%)'});
 to(h.writeAnswer,'#a1',{clipPath:'inset(0% 0% 0% 0%)',duration:0.12,ease:'none'});
 to(h.writeAnswer+0.13,'#ans110 .bar',{clipPath:'inset(0% 0% 0% 0%)',duration:0.1,ease:'power1.inOut'});
 to(h.writeAnswer+0.24,'#a10',{clipPath:'inset(0% 0% 0% 0%)',duration:0.22,ease:'none'});
-gsap.set('#chk',{scale:0,rotation:-30});
-ft(h.check,'#chk',{scale:0,rotation:-30},{scale:1,rotation:0,duration:0.5,ease:'back.out(2.4)'});
+const okP=$('#okP');draw(h.check,okP,okP.getTotalLength(),0.35,'power2.inOut');
+gsap.set(pen2,{left:a1o.x+40,top:a1o.y-60,opacity:0,scale:0.9});
+ft(h.writeAnswer-0.25,pen2,{opacity:0,left:a1o.x+90,top:a1o.y-120},{opacity:1,left:a1o.x+$('#a1').offsetWidth*0.5,top:a1o.y+10,duration:0.25,ease:'power2.out'});
+to(h.writeAnswer,pen2,{top:a1o.y+$('#a1').offsetHeight*0.85,duration:0.12,ease:'none'});
+to(h.writeAnswer+0.13,pen2,{left:a10o.x+$('#a10').offsetWidth,top:a10o.y-8,duration:0.1,ease:'power1.inOut'});
+to(h.writeAnswer+0.24,pen2,{left:a10o.x+$('#a10').offsetWidth*0.9,top:a10o.y+$('#a10').offsetHeight*0.7,duration:0.22,ease:'sine.inOut'});
+to(h.writeAnswer+0.48,pen2,{left:'+=90',top:'+=160',opacity:0,duration:0.35,ease:'power2.in'});
 to(h.check,nbox,{borderColor:'#1D9A6C',duration:0.2});
 gsap.set(conf2,{opacity:0,y:50,scale:0.7});gsap.set(cap2,{opacity:0,clipPath:'inset(0% 100% 0% 0%)'});
 ft(h.confAgain,conf2,{opacity:0,y:50,scale:0.7},{opacity:1,y:0,scale:1,duration:0.55,ease:'back.out(1.8)'});
@@ -505,15 +540,15 @@ ft(h.confAgain+0.2,cap2,{opacity:0,clipPath:'inset(0% 100% 0% 0%)'},{opacity:1,c
 ft(h.newCard+0.7,NC,{y:0},{y:-10,duration:h.logo-h.newCard-0.7,ease:'sine.inOut'});
 
 // --- S7: the card's spectrum edge becomes the underline; the name rises out of it
-to(h.logo-0.05,[NC,conf2,cap2],{opacity:0,scale:0.92,duration:0.3,ease:'power2.in'});
+to(h.logo-0.35,[conf2,cap2],{opacity:0,y:20,duration:0.22,ease:'power2.in'});
+to(h.logo-0.3,NC.querySelectorAll(':scope > :not(#spec)'),{opacity:0,duration:0.22,ease:'power2.in'});to(h.logo-0.1,NC,{opacity:0,duration:0.12});
 const ENDL=$('#end');gsap.set(ENDL,{opacity:0,background:'transparent'});show(h.logo-0.05,ENDL);set(h.logo+0.25,ENDL,{background:'#F5F7FB'});
 const LX=parseFloat(line.style.left),LYY=parseFloat(line.style.top);
 gsap.set(line,{left:NCL[0],top:NCL[1],width:NCL[2],height:12});
 to(h.logo-0.05,line,{left:LX,top:LYY,width:rowW,height:10,duration:0.45,ease:'expo.inOut'});
-[word,sub].forEach((w,i)=>{gsap.set(w,{clipPath:'inset(100% 0% 0% 0%)',y:60});
-  ft(h.logo+0.2+i*0.1,w,{clipPath:'inset(100% 0% 0% 0%)',y:60},{clipPath:'inset(0% 0% 0% 0%)',y:0,duration:0.65,ease:'expo.out'})});
-gsap.set(glyph,{scale:0,rotation:-20});
-ft(h.logo+0.35,glyph,{scale:0,rotation:-20},{scale:1,rotation:0,duration:0.7,ease:'back.out(1.7)'});
+gsap.set([word,sub],{opacity:0,y:50});ft(h.logo+0.3,[word,sub],{opacity:0,y:50},{opacity:1,y:0,duration:0.6,stagger:0.06,ease:'expo.out'});
+gsap.set(glyph,{scale:0.6,opacity:0,y:30});
+ft(h.logo+0.35,glyph,{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,duration:0.6,ease:'back.out(1.7)'});
 const gIn=glyph.querySelector('#gIn');const gRays=[...glyph.querySelectorAll('#gRays line')];
 const gL=l=>Math.hypot(l.x2.baseVal.value-l.x1.baseVal.value,l.y2.baseVal.value-l.y1.baseVal.value);
 draw(h.logo+0.65,gIn,gL(gIn),0.25,'power2.in');

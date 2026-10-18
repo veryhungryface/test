@@ -19,3 +19,19 @@ Critics (fresh, no build context): director 16:9, sound-off reader, 9:16 format 
 | Prism read as a play button (9:16) | rotated 90° | always apex-up |
 
 Sound-off rating v1: **3 / 5** (reader could not explain the prism or the pink block).
+
+## Round 2 → 3 (v2 silent renders, one fresh critic on both formats) — verdict: one more pass
+| issue | v2 measurement | fix in v3 |
+|---|---|---|
+| Red **circle** reads as 정답 to Korean parents | 2.4–4.0 s contradicts "왜 틀렸을까?" | wrong = red 빗금 (slash) through 6/6; the circle is saved for the correct 1/10 (24.1 s) — also dropped the ✓ badge (✓ can mean wrong on Korean tests) |
+| Black-flash pulse on bars | pixel (700,360) → (0,0,0) at 19.117 and 19.85 (diff ×40) | brightness tween now from 1 → 1.3 (was from the CSS default 0) |
+| Dead opening, no human | 0–2.4 s identical cells; no hand | stylus writes 6/6 on camera 0–0.6 s; chip springs in 0.7; tap 1.3 with press + 150 px ripple; stylus also writes 1/10 |
+| Grey-slab muddle 13.9–14.35 | headline 1.5:1 on mid-grey | card stays dark while growing; page flips to paper in one frame at 14.4; label exits separately |
+| 5/20 removal pops; orphan sliver; labels stale | 1-frame vanish at 21.35; sliver 21.45–22.3 | 300 ms cross-dissolve, chunk hard-hidden after; 14/20 → 9/20 (green), 5/20 dimmed |
+| Card ghosting over wordmark 26.03–26.33; sliced glyphs | card at 30 % over PRISM | card cleared by 25.8; lockup rises as one move (opacity + y) after the line lands |
+| Near-empty dip 22.37–22.42; overlap muddle | 3–4 empty frames | opaque card slides over the leaving page (starts 22.28) |
+| 9/20 green contrast | 2.6:1 | #157A55 (≥4.5:1) |
+| 9:16 rays stab cards / circle in right zone | rays visible between cards; x 974 | rays run down the left gutter like fibre and turn into each accent bar; cards x 130–940; slash replaces circle |
+| Consistency | serif 7/10 next to handwritten 6/6; logo ray order ≠ card order | the moves scene is in the child's handwriting; logo rays and spectrum gradient ordered blue → coral → green → amber like the cards |
+| Prism hold still | 7.87–9.28 s near-frozen | glass turns 3°, glow breathes; focus push 1.1 → 1.18 |
+| Sound-off read | 3 / 5 | (re-measured in round 3) |
