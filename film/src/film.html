@@ -148,7 +148,7 @@ const prismSVG=(s,id,paper)=>`<svg width="${s}" height="${s}" viewBox="-60 -60 1
  <path d="M0 -52 L45 26 L-45 26 Z" fill="url(#pg${id})" stroke="${paper?'#3059D8':'#C9D7FF'}" stroke-width="${paper?3.2:2.6}" stroke-linejoin="round"/>
  <path d="M-2 -46 L-40 22" stroke="#fff" stroke-opacity="${paper?.9:.55}" stroke-width="1.6" stroke-linecap="round"/></svg>`;
 const PEN=`<svg width="40" height="230" viewBox="0 0 40 230"><path d="M20 0 L31 26 H9 Z" fill="#C9CED8"/><circle cx="20" cy="2" r="2.5" fill="#1A2233"/><rect x="8" y="25" width="24" height="14" rx="3" fill="#8A93A3"/><rect x="8" y="38" width="24" height="192" rx="10" fill="#2B3445"/><rect x="12" y="44" width="5" height="170" rx="2.5" fill="#fff" fill-opacity=".18"/></svg>`;
-const BEAMS=[{c:'#769EFD',lab:'오류 위치',val:'분모 계산'},{c:'#F07479',lab:'오개념',val:'분모가 다른 채로 뺌'},{c:'#2FBF8A',lab:'확신도',val:'확신함 · 그런데 오답'},{c:'#F2B04D',lab:'사고 수준',val:'통분 이해 이전'}];
+const BEAMS=[{c:'#9DB8FF',lab:'오류 위치',val:'분모 계산'},{c:'#F07479',lab:'오개념',val:'분모가 다른 채로 뺌'},{c:'#45D19E',lab:'확신도',val:'확신함 · 그런데 오답'},{c:'#F2B04D',lab:'사고 수준',val:'통분 이해 이전'}];
 
 // ------------------------------------------------------------- layouts
 const LY=V?{
@@ -157,7 +157,7 @@ const LY=V?{
   tools:null, canvas:[60,750,880,370], ansbox:null,
   confq:[60,1134,30], opts:{x:60,y:1178,w:432,h:86,gx:16,gy:12,fs:26,row:true,cols:2}, submit:[60,1376,880,96,38],
   eqFont:96, camZoom:1.6, chipScale:1.45, chipPos:[500,1200], camC:[500,880],
-  ans66:[220,420], ansScale:1.5, prism:[560,560,320], dq:[500,800,60],
+  ans66:[800,400], ansScale:1.5, prism:[380,600,320], dq:[540,820,60],
   cards:{x:130,w:810,h:128,ys:[920,1070,1220,1370],lab:34,val:44}, focusScale:1.14,
   head:[500,380,58], eq2:[500,930], eqFont2:118, ann:72,
   bars:{x:200,w:680,h:160,ys:[700,950],lab:130,fs:60}, note:[500,1180,50], result:[500,1330,96],
@@ -169,7 +169,7 @@ const LY=V?{
   tools:[770,150], canvas:[770,250,1126,800], ansbox:[44,330,632,250],
   confq:[44,640,30], opts:{x:44,y:690,w:152,h:140,gx:8,gy:0,fs:19,row:false,cols:4}, submit:[1730,18,166,84,34],
   eqFont:80, camZoom:2.25, chipScale:1.75, chipPos:[1290,905], camC:[960,540],
-  ans66:[330,540], ansScale:1.6, prism:[800,560,440], dq:[800,215,64],
+  ans66:[330,540], ansScale:1.6, prism:[800,560,440], dq:[800,205,84],
   cards:{x:1180,w:640,h:140,ys:[300,460,620,780],lab:30,val:46}, focusScale:1.18,
   head:[960,140,62], eq2:[960,640], eqFont2:128, ann:80,
   bars:{x:660,w:900,h:140,ys:[300,510],lab:140,fs:66}, note:[1110,710,50], result:[960,850,100],
@@ -231,7 +231,7 @@ const prismWrap=$('#prismWrap');const P=LY.prism, PS=P[2];
 prismWrap.innerHTML=prismSVG(PS,'a')+`<div id="pglow" class="abs" style="left:${PS*0.2}px;top:${PS*0.25}px;width:${PS*0.6}px;height:${PS*0.5}px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9),rgba(150,180,255,.3) 45%,rgba(150,180,255,0) 70%)"></div>`;
 box(prismWrap,P[0]-PS/2,P[1]-PS/2,PS,PS);
 const u=PS/120; // prism unit -> px
-const entry={x:P[0]-22.5*u,y:P[1]-13*u}, exit={x:P[0]+22.5*u,y:P[1]-13*u};
+const entry=V?{x:P[0]+22.5*u,y:P[1]-13*u}:{x:P[0]-22.5*u,y:P[1]-13*u}, exit=V?{x:P[0]-22.5*u,y:P[1]-13*u}:{x:P[0]+22.5*u,y:P[1]-13*u};
 const AX=LY.ans66[0],AY=LY.ans66[1];
 const beam=$('#beam');const bl=Math.hypot(entry.x-AX,entry.y-AY);const ba=Math.atan2(entry.y-AY,entry.x-AX)*180/Math.PI;
 box(beam,AX,AY,bl);
@@ -364,7 +364,7 @@ if(V){const f=$('#focus');const z=LY.camZoom,g=68*z;
   const band=(top,hh,mask)=>`<div class="abs" style="left:0;top:${top}px;width:100%;height:${hh}px;background-color:#fff;background-image:${bgI};background-size:${g}px ${g}px;background-position:${gx}px ${gy-top}px;-webkit-mask-image:${mask}"></div>`;
   const ct=CY+(LY.canvas[1]-EQC.y)*z, cb=CY+(LY.canvas[1]+LY.canvas[3]-EQC.y)*z;
   f.innerHTML=band(0,ct+24,'linear-gradient(#000 calc(100% - 40px),transparent)')+band(cb-24,H-cb+24,'linear-gradient(transparent,#000 40px)');
-  to(h.pullback+0.08,f,{opacity:0,duration:0.14,ease:'power2.in'});}
+  const [bt,bb]=f.children;to(h.pullback,bt,{y:-(ct+24),duration:0.55,ease:'expo.in'});to(h.pullback,bb,{y:H-cb+24,duration:0.55,ease:'expo.in'});}
 
 // --- S1: frame one = the finished work + the confident chip; the pen lands the last stroke
 const t5b=t5.querySelector('.bar');
@@ -393,15 +393,15 @@ to(h.confTap+0.7,conf,{y:-6,duration:1.2,ease:'sine.inOut'});
 draw(h.slash,slashP,slashL,h.slashDone-h.slash,'power3.in');
 to(h.slashDone,'#t5',{color:'#E0565B',duration:0.12});
 to(h.slashDone,'#t5',{x:-6,duration:0.05,yoyo:true,repeat:3,ease:'sine.inOut'});
-to(h.pullback,conf,{left:SLOT.x-O.w/2,scale:1,duration:0.8,ease:'expo.inOut'});
+to(h.pullback,conf,{left:SLOT.x-O.w/2,duration:0.8,ease:'expo.inOut'});to(h.pullback,conf,{scale:1,duration:0.5,ease:'power3.out'});
 to(h.pullback,conf,{top:SLOT.y-O.h/2,y:0,duration:0.8,ease:'expo.inOut'});
 to(h.pullback+0.15,conf,{filter:'blur(2.4px)',duration:0.25,ease:'power1.in'});to(h.pullback+0.4,conf,{filter:'blur(0px)',duration:0.35,ease:'power1.out'});
 gsap.set(optEls[0],{opacity:0});hide(h.pullback+0.8,conf);set(h.pullback+0.8,optEls[0],{className:optEls[0].className+' sel',opacity:1});
 const sb=off(submit,ui);const SUB={x:sb.x+LY.submit[2]/2,y:sb.y+LY.submit[3]/2};
 tap(h.submitTap,SUB.x+(V?150:0),SUB.y+6);
-if(!V)to(h.pullback+0.8,cam,{s:1.04,cx:W/2+(SUB.x-W/2)*0.12,cy:H/2+(SUB.y-H/2)*0.12,duration:0.7,ease:'power2.inOut'});
+ft(h.pullback+0.8,'#ui',{scale:1},{scale:1.012,transformOrigin:'50% 50%',duration:h.lift-h.pullback-0.8,ease:'sine.inOut'});
 to(h.submitTap,submit,{scale:0.92,backgroundColor:'#1F3FA6',duration:0.08,ease:'power2.in'});
-to(h.submitTap+0.08,submit,{scale:1,backgroundColor:'#3059D8',duration:0.45,ease:'elastic.out(1,0.5)'});
+to(h.submitTap+0.2,submit,{scale:1,backgroundColor:'#3059D8',duration:0.45,ease:'elastic.out(1,0.5)'});
 
 // --- S3: ink grows out of the 6/6; the 6/6 becomes the beam
 const R=Math.hypot(W,H)*1.1;
@@ -467,7 +467,7 @@ $('#expander').appendChild(expVal);
 const HDx=parseFloat(headA.style.left), HDy=parseFloat(headA.style.top);
 to(h.toPaper,expVal,{left:HDx,top:HDy,fontSize:LY.head[2],duration:0.55,ease:'expo.inOut'});
 to(h.toPaper+0.45,expVal,{color:'#C4373D',duration:0.3,ease:'power1.inOut'});
-hide(h.toPaper,cardEls[1]);
+hide(h.toPaper,cardEls[1]);to(h.toPaper-0.18,[cardEls[0],cardEls[2],cardEls[3]],{opacity:0,duration:0.16,ease:'power2.in'});
 const expLab=el('div','abs',BEAMS[1].lab,$('#expander'),{color:'#F07479',fontWeight:700,fontSize:CD.lab*FS+'px',whiteSpace:'nowrap'});
 const lab2=cardEls[1].querySelector('.lab');const l2o=off(lab2,cardEls[1]);
 gsap.set(expLab,{left:v2x,top:C2.y+(CD.ys[1]-CD.h/2+l2o.y-C2.y)*FS,opacity:0});show(h.toPaper,expLab);to(h.toPaper,expLab,{opacity:0,y:-30,duration:0.25,ease:'power2.in'});
@@ -477,8 +477,8 @@ ft(h.toPaper+0.9,p2in,{scale:1},{scale:1.06,duration:h.newCard-h.toPaper-0.9,eas
 gsap.set(headB,{opacity:0});
 // the equation arrives under the headline
 gsap.set(['#p1','#p2','#eqP .op'],{opacity:0,y:40});gsap.set('#p66',{opacity:0,scale:0.4});
-ft(h.toPaper+0.85,['#p1','#eqP .op','#p2'],{opacity:0,y:40},{opacity:1,y:0,duration:0.45,stagger:0.05,ease:'power3.out'});
-ft(h.toPaper+1.0,'#p66',{opacity:0,scale:0.4},{opacity:1,scale:1,duration:0.5,ease:'back.out(2)'});
+ft(h.toPaper+0.62,['#p1','#eqP .op','#p2'],{opacity:0,y:40},{opacity:1,y:0,duration:0.45,stagger:0.05,ease:'power3.out'});
+ft(h.toPaper+0.78,'#p66',{opacity:0,scale:0.4},{opacity:1,scale:1,duration:0.5,ease:'back.out(2)'});
 // the child's two moves, drawn quickly on the words
 gsap.set(['#aTopH','#aBotH',lTop,lBot],{opacity:0});
 ['#aTop','#aBot'].forEach((s,i)=>{const p=$(s);draw(i?h.arrowBottom-0.3:h.arrowTop-0.3,p,p.getTotalLength(),0.3)});
@@ -489,10 +489,10 @@ to(h.arrowBottom+0.5,'#p66',{color:'#E0565B',scale:1.15,duration:0.25,ease:'powe
 to(h.arrowBottom+0.75,'#p66',{scale:1,duration:0.5,ease:'power2.inOut'});
 to(h.arrowBottom+0.9,eqG,{y:-8,duration:0.8,ease:'sine.inOut'});
 // bars: the equation leaves first, then the pieces arrive (no overlap)
-to(h.bars-0.35,eqG,{y:-160,opacity:0,duration:0.35,ease:'power3.in'});
+to(h.bars-0.35,eqG,{y:200,opacity:0,duration:0.4,ease:'power3.in'});
 const barParts=[barA.row,barB.row];gsap.set(barParts,{opacity:0,scaleX:0.5,transformOrigin:'0% 50%'});
 gsap.set([labA,labB,labA2,labB2],{opacity:0,x:-20});gsap.set([...barA.cells,...barB.cells],{opacity:0});
-ft(h.bars,barParts,{opacity:0,scaleX:0.5},{opacity:1,scaleX:1,duration:0.6,stagger:0.12,ease:'expo.out'});
+ft(h.bars-0.15,barParts,{opacity:0,scaleX:0.5},{opacity:1,scaleX:1,duration:0.6,stagger:0.12,ease:'expo.out'});
 ft(h.bars+0.1,barA.cells,{opacity:0},{opacity:1,duration:0.18,stagger:0.035,ease:'none'});
 ft(h.bars+0.22,barB.cells,{opacity:0},{opacity:1,duration:0.18,stagger:0.07,ease:'none'});
 ft(h.bars+0.05,[labA,labB],{opacity:0,x:-20},{opacity:1,x:0,duration:0.5,stagger:0.12,ease:'power3.out'});
@@ -502,7 +502,7 @@ ft(h.sizeNote+0.5,[barA.cells[0],barB.cells[0]],{filter:'brightness(1)'},{filter
 // --- re-slice into twentieths; the headline turns from the mistake to the method
 to(h.reslice-0.2,[note,'#bA','#bB'],{opacity:0,duration:0.2,ease:'power2.in'});
 to(h.reslice-0.2,headA,{opacity:0,y:-30,duration:0.25,ease:'power2.in'});
-ft(h.reslice,headB,{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'power3.out'});
+ft(h.reslice+0.1,headB,{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:'power3.out'});
 gsap.set([...barA.subs,...barB.subs],{scaleY:0});
 ft(h.reslice,barA.subs,{scaleY:0},{scaleY:1,duration:0.25,stagger:0.02,ease:'power2.out'});
 ft(h.reslice+0.08,barB.subs,{scaleY:0},{scaleY:1,duration:0.25,stagger:0.018,ease:'power2.out'});
@@ -547,13 +547,12 @@ ft(h.newCard+0.7,NC,{y:0},{y:-10,duration:h.logo-h.newCard-0.7,ease:'sine.inOut'
 // --- S7: the card's spectrum edge becomes the underline; the name rises out of it
 to(h.logo-0.4,[conf2,cap2],{opacity:0,y:20,duration:0.3,ease:'power2.in'});
 to(h.logo-0.4,NC.querySelectorAll(':scope > :not(#spec)'),{opacity:0,duration:0.3,ease:'power2.in'});
-to(h.logo-0.3,NC,{backgroundColor:'rgba(255,255,255,0)',borderColor:'rgba(227,232,242,0)',boxShadow:'0 30px 80px -30px rgba(26,34,51,0)',duration:0.3,ease:'power2.in'});
-set(h.logo-0.05,NC,{opacity:0});
-const ENDL=$('#end');gsap.set(ENDL,{opacity:0,background:'transparent'});show(h.logo-0.05,ENDL);set(h.logo+0.05,ENDL,{background:'#F5F7FB'});set(h.logo+0.05,P2,{opacity:0});
+to(h.logo-0.3,NC,{opacity:0,duration:0.3,ease:'power1.in'});
+const ENDL=$('#end');gsap.set(ENDL,{opacity:0,background:'transparent'});show(h.logo-0.3,ENDL);set(h.logo+0.05,ENDL,{background:'#F5F7FB'});set(h.logo+0.05,P2,{opacity:0});
 const LX=parseFloat(line.style.left),LYY=parseFloat(line.style.top);
-gsap.set(line,{left:NCL[0],top:NCL[1],width:NCL[2],height:12,borderRadius:0});
-to(h.logo-0.05,line,{left:LX,top:LYY,width:rowW,height:10,borderRadius:5,duration:0.5,ease:'expo.inOut'});
-gsap.set([word,sub],{opacity:0,y:60,scale:0.94});ft(h.logo+0.3,[word,sub],{opacity:0},{opacity:1,duration:0.12,stagger:0.06,ease:'none'});ft(h.logo+0.3,[word,sub],{y:60,scale:0.94},{y:0,scale:1,duration:0.6,stagger:0.06,ease:'expo.out'});
+gsap.set(line,{left:NCL[0],top:NCL[1],width:NCL[2],height:12,borderRadius:0,y:-10});
+to(h.logo-0.05,line,{left:LX,top:LYY,width:rowW,height:10,borderRadius:5,duration:0.36,ease:'expo.inOut'});
+gsap.set([word,sub],{opacity:0,y:60,scale:0.94});ft(h.logo+0.2,[word,sub],{opacity:0},{opacity:1,duration:0.12,stagger:0.06,ease:'none'});ft(h.logo+0.2,[word,sub],{y:60,scale:0.94},{y:0,scale:1,duration:0.6,stagger:0.06,ease:'expo.out'});
 gsap.set(glyph,{scale:0.6,opacity:0,y:30});
 ft(h.logo+0.35,glyph,{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,duration:0.6,ease:'back.out(1.7)'});
 const gIn=glyph.querySelector('#gIn');const gRays=[...glyph.querySelectorAll('#gRays line')];
@@ -566,6 +565,7 @@ gsap.set(cta,{opacity:0,scale:0.7});ft(h.cta,cta,{opacity:0,scale:0.7},{opacity:
 // the end keeps breathing to the last frame
 ft(h.logo+0.3,END,{scale:1},{scale:1.03,duration:T.duration-h.logo-0.3,ease:'none'});
 to(h.cta+0.8,cta,{scale:1.045,duration:0.4,ease:'sine.inOut',yoyo:true,repeat:3});
+to(h.logo+1.4,gRays,{attr:{x2:'+=5'},duration:0.9,ease:'sine.inOut',yoyo:true,repeat:3,stagger:0.08});
 tl.set({}, {}, T.duration);
 
 window.seek=f=>{tl.seek(f/FPS,false);applyCam()};

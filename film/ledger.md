@@ -48,3 +48,18 @@ Sound-off rating v1: **3 / 5** (reader could not explain the prism or the pink b
 | Dimmed cards too low | labels 2.0:1, from 11.5 s | dim to 60 % from 12.3 s |
 | 9:16 zones | bars to x 964, card stack to y 1490 | bars 200–880 (×1.06 drift ≤ 903), cards up 40 px |
 | Holds | 7.0 s (16:9) / 9.7 s (9:16) near-still runs | opening push 7–8 %, prism-scene push 6 % |
+
+## Round 4 → 5 (v4) — verdict: one more pass · sound-off 16:9 4/5, 9:16 3/5
+| issue | v4 measurement | fix in v5 |
+|---|---|---|
+| Pull-back ghosting (9:16) | UI cross-faded at partial alpha 3.60–3.95 | focus bands now open like curtains (move off-frame at full opacity); chip shrinks first, then travels |
+| Brand crop in 16:9 | push toward 제출하기 cropped "PRISM" 4.6–5.85 | push removed; UI breathes 1.2 % instead |
+| Headline double exposure ~20.22 | old/new line overlapping | new line enters 0.1 s after the old one is gone |
+| Card-shell pop 26.25 | 1-frame vanish (diff 2.6 vs 0.04) | card fades over 0.3 s under the travelling spectrum line |
+| 9:16 rays read backwards | rays left toward the incoming beam | 9:16 prism scene mirrored: light from the right, dispersion out of the left face into the gutter |
+| Dead air | 14.57–14.82, 26.25–26.6 | equation enters as the iris passes (−0.23 s); line travel 0.36 s, lockup −0.1 s |
+| Eyebrow contrast | 오류 위치 3.91, 확신도 4.24 | #9DB8FF / #45D19E on #1D2438 |
+| Dissolve through empty 17.45 | equation out, then bars in | equation drops out while bars arrive (overlap 0.2 s) |
+| Siblings through the growing card | text visible 14.13–14.20 | siblings to 0 before the card grows |
+| Submit press flicker | 2 frames | press held 0.2 s |
+| Static end | 2.28 s still | glyph rays breathe through the end hold |
