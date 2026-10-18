@@ -63,3 +63,10 @@ Sound-off rating v1: **3 / 5** (reader could not explain the prism or the pink b
 | Siblings through the growing card | text visible 14.13–14.20 | siblings to 0 before the card grows |
 | Submit press flicker | 2 frames | press held 0.2 s |
 | Static end | 2.28 s still | glyph rays breathe through the end hold |
+
+## Round 5 (v5) — verdict: **ship** · sound-off 16:9 4/5, 9:16 4/5
+10 of 11 round-4 items verified fixed, no regressions. Leftovers fixed after the verdict and re-scanned on the final renders:
+- 14.65–14.82 freeze (11 frames) → paper page shown as the iris completes (−0.12 s); final scan: no zero-change run ≥ 0.1 s in either file.
+- 17.47–17.63 bar outlines over the fading equation → equation gone 0.1 s before outlines start.
+- Rays pointing at emptied card slots 13.90–14.05 → rays fade with their cards.
+Final renders: 0 single-frame spikes, 0 near-blank frames (both formats).

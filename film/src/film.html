@@ -467,13 +467,13 @@ $('#expander').appendChild(expVal);
 const HDx=parseFloat(headA.style.left), HDy=parseFloat(headA.style.top);
 to(h.toPaper,expVal,{left:HDx,top:HDy,fontSize:LY.head[2],duration:0.55,ease:'expo.inOut'});
 to(h.toPaper+0.45,expVal,{color:'#C4373D',duration:0.3,ease:'power1.inOut'});
-hide(h.toPaper,cardEls[1]);to(h.toPaper-0.18,[cardEls[0],cardEls[2],cardEls[3]],{opacity:0,duration:0.16,ease:'power2.in'});
+hide(h.toPaper,cardEls[1]);to(h.toPaper-0.18,[cardEls[0],cardEls[2],cardEls[3],rayEls[0].l,rayEls[2].l,rayEls[3].l],{opacity:0,duration:0.16,ease:'power2.in'});
 const expLab=el('div','abs',BEAMS[1].lab,$('#expander'),{color:'#F07479',fontWeight:700,fontSize:CD.lab*FS+'px',whiteSpace:'nowrap'});
 const lab2=cardEls[1].querySelector('.lab');const l2o=off(lab2,cardEls[1]);
 gsap.set(expLab,{left:v2x,top:C2.y+(CD.ys[1]-CD.h/2+l2o.y-C2.y)*FS,opacity:0});show(h.toPaper,expLab);to(h.toPaper,expLab,{opacity:0,y:-30,duration:0.25,ease:'power2.in'});
 const P2=$('#paper2');gsap.set(P2,{opacity:0});
-show(h.toPaper+0.9,P2);hide(h.toPaper+0.92,['#expander',dark]);
-ft(h.toPaper+0.9,p2in,{scale:1},{scale:1.06,duration:h.newCard-h.toPaper-0.9,ease:'none'});
+show(h.toPaper+0.78,P2);hide(h.toPaper+0.8,['#expander',dark]);
+ft(h.toPaper+0.78,p2in,{scale:1},{scale:1.06,duration:h.newCard-h.toPaper-0.78,ease:'none'});
 gsap.set(headB,{opacity:0});
 // the equation arrives under the headline
 gsap.set(['#p1','#p2','#eqP .op'],{opacity:0,y:40});gsap.set('#p66',{opacity:0,scale:0.4});
@@ -489,10 +489,10 @@ to(h.arrowBottom+0.5,'#p66',{color:'#E0565B',scale:1.15,duration:0.25,ease:'powe
 to(h.arrowBottom+0.75,'#p66',{scale:1,duration:0.5,ease:'power2.inOut'});
 to(h.arrowBottom+0.9,eqG,{y:-8,duration:0.8,ease:'sine.inOut'});
 // bars: the equation leaves first, then the pieces arrive (no overlap)
-to(h.bars-0.35,eqG,{y:200,opacity:0,duration:0.4,ease:'power3.in'});
+to(h.bars-0.45,eqG,{y:200,opacity:0,duration:0.32,ease:'power3.in'});
 const barParts=[barA.row,barB.row];gsap.set(barParts,{opacity:0,scaleX:0.5,transformOrigin:'0% 50%'});
 gsap.set([labA,labB,labA2,labB2],{opacity:0,x:-20});gsap.set([...barA.cells,...barB.cells],{opacity:0});
-ft(h.bars-0.15,barParts,{opacity:0,scaleX:0.5},{opacity:1,scaleX:1,duration:0.6,stagger:0.12,ease:'expo.out'});
+ft(h.bars-0.12,barParts,{opacity:0,scaleX:0.5},{opacity:1,scaleX:1,duration:0.6,stagger:0.12,ease:'expo.out'});
 ft(h.bars+0.1,barA.cells,{opacity:0},{opacity:1,duration:0.18,stagger:0.035,ease:'none'});
 ft(h.bars+0.22,barB.cells,{opacity:0},{opacity:1,duration:0.18,stagger:0.07,ease:'none'});
 ft(h.bars+0.05,[labA,labB],{opacity:0,x:-20},{opacity:1,x:0,duration:0.5,stagger:0.12,ease:'power3.out'});
