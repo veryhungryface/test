@@ -1,0 +1,14 @@
+{
+  "source": "vo_chaewon_s50",
+  "note": "Line windows (seconds in the source clip) from Magnific word timings; build.py trims silence inside each window.",
+  "lines": {
+    "L1": [0.20, 2.10],
+    "L2": [3.95, 6.72],
+    "L3": [6.90, 10.16],
+    "L4": [10.40, 15.44],
+    "L5": [15.60, 19.08],
+    "L6": [19.15, 22.02],
+    "L7": [22.40, 26.42],
+    "L8": [26.66, 29.40]
+  }
+}

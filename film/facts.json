@@ -1,0 +1,24 @@
+{
+  "sources": {
+    "S1": {"what": "User screenshot of the live diagnostic page", "url": "https://go.prism-math.kr", "file": "assets/diagnostic-ref.png", "captured": "2026-10-18"},
+    "S2": {"what": "User's own description of the service (three engines), stated in chat / user preferences", "url": null, "captured": "2026-10-18"}
+  },
+  "claims": [
+    {"id": "F1", "on_screen": "PRISM 분수 진단", "source": "S1", "exact": "PRISM 분수 진단"},
+    {"id": "F2", "on_screen": "go.prism-math.kr", "source": "S1", "exact": "go.prism-math.kr"},
+    {"id": "F3", "on_screen": "문항 3 / 3, 제출하기, 펜, 지우개, 전체화면, 이전, 문항 목록, 정답", "source": "S1", "exact": "문항 3 / 3 … 제출하기 … 펜 … 지우개"},
+    {"id": "F4", "on_screen": "Problem text (juice 7/10 L, drank 1/4 L, answer as 기약분수)", "source": "S1", "exact": "주스가 7/10 L 있었습니다. 그중에서 1/4 L를 마셨다면 남은 주스는 몇 L인지 기약분수로 나타내어 보세요."},
+    {"id": "F5", "on_screen": "지금 답, 얼마나 확실한가요? + four confidence options", "source": "S1", "exact": "답이 맞다고 확신해요. / 아마 맞을 것 같아요. / 답이 맞는지 자신이 없어요. / 전혀 몰라서 풀 수 없었어요."},
+    {"id": "F6", "voice": "프리즘은 점수 대신, 이유를 봅니다.", "source": "S2", "exact": "초정밀 진단 엔진: 학생의 사고 수준, 오개념 정도, 오류 발생 위치를 … 분석"},
+    {"id": "F7", "voice": "어디서 틀렸는지. 왜 틀렸는지. 얼마나 확신했는지.", "source": "S1+S2", "exact": "오류 발생 위치 (S2) · 오개념 (S2) · 지금 답, 얼마나 확실한가요? (S1)"},
+    {"id": "F8", "on_screen": "Four diagnosis axes: 오류 위치 · 오개념 · 확신도 · 사고 수준", "source": "S1+S2", "exact": "사고 수준, 오개념 정도, 오류 발생 위치 (S2); 확신도 question (S1)"},
+    {"id": "F9", "voice": "그래서 다음 문제는, 이 아이만을 위해 만들어집니다.", "source": "S2", "exact": "초개인화 맞춤 엔진: 학생 상태에 맞춰 최적의 문제, 맞춤형 설명, 시각화 자료를 실시간 생성해 제공"},
+    {"id": "F10", "on_screen": "Handwritten work on the canvas, graded step by step", "source": "S1+S2", "exact": "펜 + grid canvas (S1); 풀이 분석 및 채점 엔진: 손글씨 풀이 … 단계별로 채점 (S2)"}
+  ],
+  "illustrative_not_claims": [
+    "The child's work (7/10 − 1/4 = 6/6) and the diagnosis values on the four cards are a dramatised example of one student, not product output or statistics.",
+    "Maths in the film is real: 7/10 − 1/4 = 14/20 − 5/20 = 9/20; (7−1)/(10−4) = 6/6 is the classic 'subtract tops and bottoms' misconception; 3/5 − 1/2 = 6/10 − 5/10 = 1/10."
+  ],
+  "not_used": ["No numbers, ratings, prices, testimonials, user counts, accuracy figures or 'free' claims — none exist in the sources."],
+  "human_check": ["S2 describes engines the user is building. Confirm the live service already delivers F6/F9 before public release, or present the film as a vision piece."]
+}
