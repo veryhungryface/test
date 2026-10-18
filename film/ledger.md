@@ -35,3 +35,16 @@ Sound-off rating v1: **3 / 5** (reader could not explain the prism or the pink b
 | Consistency | serif 7/10 next to handwritten 6/6; logo ray order ≠ card order | the moves scene is in the child's handwriting; logo rays and spectrum gradient ordered blue → coral → green → amber like the cards |
 | Prism hold still | 7.87–9.28 s near-frozen | glass turns 3°, glow breathes; focus push 1.1 → 1.18 |
 | Sound-off read | 3 / 5 | (re-measured in round 3) |
+
+## Round 3 → 4 (v3) — verdict: one more pass · sound-off 16:9 4/5, 9:16 3/5 (up from 3/5)
+| issue | v3 measurement | fix in v4 |
+|---|---|---|
+| One-frame white flash at 14.40 | frame 864 mean diff 214.8 (neighbours 0.0–0.4) | paper iris from frame centre over 0.45 s (mirrors the ink iris at 5.4); headline colour eases white → red over 0.3 s |
+| Payoff line too brief, "정딥" mid-wipe | legible ~0.5 s | opacity + y reveal (no clip mask), held 24.65–25.9 s (1.25 s) |
+| Chip doubled over the real option | 4.07–4.50 half-alpha overlap | real option hidden until the chip lands exactly on it |
+| Product screen readable ~1 s | settle 4.7–5.0 | pull-back starts 3.5 → settles 4.3; 0.7 s on the full screen before submit; no zoom nudge in 9:16 (crisp, inside x 940) |
+| One-frame steps 13.90 / 25.82 | 31–70 k px in a frame | growing card keeps its coral border and eases it out; card shell fades its fill/border over 0.3 s instead of a 0.12 s opacity drop |
+| Outro near-empty, ghost PRISM | 25.8–26.5 | spectrum edge stays at full strength and travels into the underline; lockup rises at full opacity |
+| Dimmed cards too low | labels 2.0:1, from 11.5 s | dim to 60 % from 12.3 s |
+| 9:16 zones | bars to x 964, card stack to y 1490 | bars 200–880 (×1.06 drift ≤ 903), cards up 40 px |
+| Holds | 7.0 s (16:9) / 9.7 s (9:16) near-still runs | opening push 7–8 %, prism-scene push 6 % |

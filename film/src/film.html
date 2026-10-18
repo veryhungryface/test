@@ -158,9 +158,9 @@ const LY=V?{
   confq:[60,1134,30], opts:{x:60,y:1178,w:432,h:86,gx:16,gy:12,fs:26,row:true,cols:2}, submit:[60,1376,880,96,38],
   eqFont:96, camZoom:1.6, chipScale:1.45, chipPos:[500,1200], camC:[500,880],
   ans66:[220,420], ansScale:1.5, prism:[560,560,320], dq:[500,800,60],
-  cards:{x:130,w:810,h:128,ys:[960,1110,1260,1410],lab:34,val:44}, focusScale:1.14,
+  cards:{x:130,w:810,h:128,ys:[920,1070,1220,1370],lab:34,val:44}, focusScale:1.14,
   head:[500,380,58], eq2:[500,930], eqFont2:118, ann:72,
-  bars:{x:200,w:740,h:160,ys:[700,950],lab:130,fs:60}, note:[500,1180,50], result:[500,1330,96],
+  bars:{x:200,w:680,h:160,ys:[700,950],lab:130,fs:60}, note:[500,1180,50], result:[500,1330,96],
   newCard:[60,500,880,660], npFont:96, npY:220, mini:{y:550,w:360,h:54,gap:60}, conf2:[500,1290,580,112,32], cap2:[500,1410,46],
   end:{glyph:[500,560,210], word:[500,770,160], sub:[500,890,66], line:[500,960], tag:[500,1050,56], url:[500,1170,42,560,88], cta:[500,1320,48,820,124]}
 }:{
@@ -353,7 +353,7 @@ const draw=(t,p,L,dur,ease='power2.inOut')=>{gsap.set(p,{strokeDasharray:`${L} $
 // --- camera
 const cam={cx:EQC.x,cy:EQC.y,s:LY.camZoom,blur:0,ox:CX,oy:CY};
 function applyCam(){$('#cam').style.transform=`translate(${cam.ox-cam.cx*cam.s}px,${cam.oy-cam.cy*cam.s}px) scale(${cam.s})`;$('#cam').style.filter=cam.blur>0.05?`blur(${cam.blur}px)`:'none'}
-to(0,cam,{s:LY.camZoom*(V?1.02:1.06),duration:h.pullback,ease:'sine.inOut'});
+to(0,cam,{s:LY.camZoom*(V?1.07:1.08),duration:h.pullback,ease:'sine.inOut'});
 to(h.pullback,cam,{cx:W/2,cy:H/2,ox:W/2,oy:H/2,s:1,duration:0.8,ease:'expo.inOut'});
 to(h.pullback+0.15,cam,{blur:2.4,duration:0.25,ease:'power1.in'});
 to(h.pullback+0.4,cam,{blur:0,duration:0.35,ease:'power1.out'});
@@ -394,12 +394,12 @@ draw(h.slash,slashP,slashL,h.slashDone-h.slash,'power3.in');
 to(h.slashDone,'#t5',{color:'#E0565B',duration:0.12});
 to(h.slashDone,'#t5',{x:-6,duration:0.05,yoyo:true,repeat:3,ease:'sine.inOut'});
 to(h.pullback,conf,{left:SLOT.x-O.w/2,scale:1,duration:0.8,ease:'expo.inOut'});
-to(h.pullback,conf,{top:SLOT.y-O.h/2,y:0,duration:0.8,ease:'power3.in'});
+to(h.pullback,conf,{top:SLOT.y-O.h/2,y:0,duration:0.8,ease:'expo.inOut'});
 to(h.pullback+0.15,conf,{filter:'blur(2.4px)',duration:0.25,ease:'power1.in'});to(h.pullback+0.4,conf,{filter:'blur(0px)',duration:0.35,ease:'power1.out'});
-hide(h.pullback+0.8,conf);set(h.pullback+0.8,optEls[0],{className:optEls[0].className+' sel'});
+gsap.set(optEls[0],{opacity:0});hide(h.pullback+0.8,conf);set(h.pullback+0.8,optEls[0],{className:optEls[0].className+' sel',opacity:1});
 const sb=off(submit,ui);const SUB={x:sb.x+LY.submit[2]/2,y:sb.y+LY.submit[3]/2};
 tap(h.submitTap,SUB.x+(V?150:0),SUB.y+6);
-to(h.pullback+0.8,cam,{s:1.04,cx:W/2+(SUB.x-W/2)*0.12,cy:H/2+(SUB.y-H/2)*0.12,duration:0.7,ease:'power2.inOut'});
+if(!V)to(h.pullback+0.8,cam,{s:1.04,cx:W/2+(SUB.x-W/2)*0.12,cy:H/2+(SUB.y-H/2)*0.12,duration:0.7,ease:'power2.inOut'});
 to(h.submitTap,submit,{scale:0.92,backgroundColor:'#1F3FA6',duration:0.08,ease:'power2.in'});
 to(h.submitTap+0.08,submit,{scale:1,backgroundColor:'#3059D8',duration:0.45,ease:'elastic.out(1,0.5)'});
 
@@ -444,9 +444,9 @@ cardEls.forEach((c,i)=>{const r=rayEls[i];const v=c.querySelector('.val');
   ft(cardT[i]+0.1,v,{yPercent:110},{yPercent:0,duration:0.45,ease:'power3.out'});
 });
 // camera drifts, then pushes into the misconception card; the others step back
-ft(h.lift,darkInner,{scale:1},{scale:1.03,duration:h.focusCard-h.lift,ease:'sine.inOut'});
+ft(h.lift,darkInner,{scale:1},{scale:1.06,duration:h.focusCard-h.lift,ease:'sine.inOut'});
 to(h.focusCard,darkInner,{scale:LY.focusScale,duration:h.toPaper-h.focusCard,ease:'power2.inOut'});
-to(h.focusCard,[cardEls[0],cardEls[2],cardEls[3],prismWrap,'#rays','#beam'],{opacity:0.32,duration:0.6,ease:'power2.out'});
+to(h.focusCard,[cardEls[0],cardEls[2],cardEls[3],prismWrap,'#rays','#beam'],{opacity:0.6,duration:0.6,ease:'power2.out'});
 to(h.focusCard,cardEls[1],{borderColor:'#F07479',duration:0.4});
 
 // --- S5: the card's words become the headline of the page
@@ -455,25 +455,30 @@ const v2=cardEls[1].querySelector('.val');const v2o=off(v2,cardEls[1]);
 const v2x=C2.x+(CD.x+44-C2.x)*FS, v2y=C2.y+(CD.ys[1]-CD.h/2+v2o.y-C2.y)*FS;
 gsap.set('#expander',{opacity:0});
 show(h.toPaper,'#expander');
-set(h.toPaper,expBg,{left:C2.x-c2w/2,top:C2.y-c2h/2,width:c2w,height:c2h,backgroundColor:'#1D2438',borderRadius:20});
+set(h.toPaper,expBg,{left:C2.x-c2w/2,top:C2.y-c2h/2,width:c2w,height:c2h,backgroundColor:'#1D2438',borderRadius:20,border:'1.5px solid #F07479'});
+to(h.toPaper+0.2,expBg,{borderColor:'rgba(240,116,121,0)',duration:0.3});
 set(h.toPaper,expVal,{left:v2x,top:v2y,fontSize:CD.val*FS,color:'#FFFFFF'});
 to(h.toPaper,expBg,{left:0,top:0,width:W,height:H,borderRadius:0,duration:0.55,ease:'expo.inOut'});
-set(h.toPaper+0.5,expBg,{backgroundColor:'#F5F7FB'});
+const iris=el('div','layer',null,$('#expander'),{background:'#F5F7FB'});
+const HIc={x:W/2,y:H/2};
+gsap.set(iris,{clipPath:`circle(0px at ${HIc.x}px ${HIc.y}px)`});
+ft(h.toPaper+0.32,iris,{clipPath:`circle(0px at ${HIc.x}px ${HIc.y}px)`},{clipPath:`circle(${R}px at ${HIc.x}px ${HIc.y}px)`,duration:0.45,ease:'power2.in'});
+$('#expander').appendChild(expVal);
 const HDx=parseFloat(headA.style.left), HDy=parseFloat(headA.style.top);
 to(h.toPaper,expVal,{left:HDx,top:HDy,fontSize:LY.head[2],duration:0.55,ease:'expo.inOut'});
-set(h.toPaper+0.5,expVal,{color:'#C4373D'});
+to(h.toPaper+0.45,expVal,{color:'#C4373D',duration:0.3,ease:'power1.inOut'});
 hide(h.toPaper,cardEls[1]);
 const expLab=el('div','abs',BEAMS[1].lab,$('#expander'),{color:'#F07479',fontWeight:700,fontSize:CD.lab*FS+'px',whiteSpace:'nowrap'});
 const lab2=cardEls[1].querySelector('.lab');const l2o=off(lab2,cardEls[1]);
 gsap.set(expLab,{left:v2x,top:C2.y+(CD.ys[1]-CD.h/2+l2o.y-C2.y)*FS,opacity:0});show(h.toPaper,expLab);to(h.toPaper,expLab,{opacity:0,y:-30,duration:0.25,ease:'power2.in'});
 const P2=$('#paper2');gsap.set(P2,{opacity:0});
-show(h.toPaper+0.5,P2);hide(h.toPaper+0.52,['#expander',dark]);
-ft(h.toPaper+0.5,p2in,{scale:1},{scale:1.06,duration:h.newCard-h.toPaper-0.5,ease:'none'});
+show(h.toPaper+0.9,P2);hide(h.toPaper+0.92,['#expander',dark]);
+ft(h.toPaper+0.9,p2in,{scale:1},{scale:1.06,duration:h.newCard-h.toPaper-0.9,ease:'none'});
 gsap.set(headB,{opacity:0});
 // the equation arrives under the headline
 gsap.set(['#p1','#p2','#eqP .op'],{opacity:0,y:40});gsap.set('#p66',{opacity:0,scale:0.4});
-ft(h.toPaper+0.4,['#p1','#eqP .op','#p2'],{opacity:0,y:40},{opacity:1,y:0,duration:0.45,stagger:0.05,ease:'power3.out'});
-ft(h.toPaper+0.6,'#p66',{opacity:0,scale:0.4},{opacity:1,scale:1,duration:0.5,ease:'back.out(2)'});
+ft(h.toPaper+0.85,['#p1','#eqP .op','#p2'],{opacity:0,y:40},{opacity:1,y:0,duration:0.45,stagger:0.05,ease:'power3.out'});
+ft(h.toPaper+1.0,'#p66',{opacity:0,scale:0.4},{opacity:1,scale:1,duration:0.5,ease:'back.out(2)'});
 // the child's two moves, drawn quickly on the words
 gsap.set(['#aTopH','#aBotH',lTop,lBot],{opacity:0});
 ['#aTop','#aBot'].forEach((s,i)=>{const p=$(s);draw(i?h.arrowBottom-0.3:h.arrowTop-0.3,p,p.getTotalLength(),0.3)});
@@ -534,27 +539,28 @@ to(h.writeAnswer+0.13,pen2,{left:a10o.x+$('#a10').offsetWidth,top:a10o.y-8,durat
 to(h.writeAnswer+0.24,pen2,{left:a10o.x+$('#a10').offsetWidth*0.9,top:a10o.y+$('#a10').offsetHeight*0.7,duration:0.22,ease:'sine.inOut'});
 to(h.writeAnswer+0.48,pen2,{left:'+=90',top:'+=160',opacity:0,duration:0.35,ease:'power2.in'});
 to(h.check,nbox,{borderColor:'#1D9A6C',duration:0.2});
-gsap.set(conf2,{opacity:0,y:50,scale:0.7});gsap.set(cap2,{opacity:0,clipPath:'inset(0% 100% 0% 0%)'});
+gsap.set(conf2,{opacity:0,y:50,scale:0.7});gsap.set(cap2,{opacity:0,y:24});
 ft(h.confAgain,conf2,{opacity:0,y:50,scale:0.7},{opacity:1,y:0,scale:1,duration:0.55,ease:'back.out(1.8)'});
-ft(h.confAgain+0.2,cap2,{opacity:0,clipPath:'inset(0% 100% 0% 0%)'},{opacity:1,clipPath:'inset(0% 0% 0% 0%)',duration:0.5,ease:'power3.out'});
+ft(h.confAgain+0.15,cap2,{opacity:0,y:24},{opacity:1,y:0,duration:0.4,ease:'power3.out'});
 ft(h.newCard+0.7,NC,{y:0},{y:-10,duration:h.logo-h.newCard-0.7,ease:'sine.inOut'});
 
 // --- S7: the card's spectrum edge becomes the underline; the name rises out of it
-to(h.logo-0.35,[conf2,cap2],{opacity:0,y:20,duration:0.22,ease:'power2.in'});
-to(h.logo-0.3,NC.querySelectorAll(':scope > :not(#spec)'),{opacity:0,duration:0.22,ease:'power2.in'});to(h.logo-0.1,NC,{opacity:0,duration:0.12});
-const ENDL=$('#end');gsap.set(ENDL,{opacity:0,background:'transparent'});show(h.logo-0.05,ENDL);set(h.logo+0.25,ENDL,{background:'#F5F7FB'});
+to(h.logo-0.4,[conf2,cap2],{opacity:0,y:20,duration:0.3,ease:'power2.in'});
+to(h.logo-0.4,NC.querySelectorAll(':scope > :not(#spec)'),{opacity:0,duration:0.3,ease:'power2.in'});
+to(h.logo-0.3,NC,{backgroundColor:'rgba(255,255,255,0)',borderColor:'rgba(227,232,242,0)',boxShadow:'0 30px 80px -30px rgba(26,34,51,0)',duration:0.3,ease:'power2.in'});
+set(h.logo-0.05,NC,{opacity:0});
+const ENDL=$('#end');gsap.set(ENDL,{opacity:0,background:'transparent'});show(h.logo-0.05,ENDL);set(h.logo+0.05,ENDL,{background:'#F5F7FB'});set(h.logo+0.05,P2,{opacity:0});
 const LX=parseFloat(line.style.left),LYY=parseFloat(line.style.top);
-gsap.set(line,{left:NCL[0],top:NCL[1],width:NCL[2],height:12});
-to(h.logo-0.05,line,{left:LX,top:LYY,width:rowW,height:10,duration:0.45,ease:'expo.inOut'});
-gsap.set([word,sub],{opacity:0,y:50});ft(h.logo+0.3,[word,sub],{opacity:0,y:50},{opacity:1,y:0,duration:0.6,stagger:0.06,ease:'expo.out'});
+gsap.set(line,{left:NCL[0],top:NCL[1],width:NCL[2],height:12,borderRadius:0});
+to(h.logo-0.05,line,{left:LX,top:LYY,width:rowW,height:10,borderRadius:5,duration:0.5,ease:'expo.inOut'});
+gsap.set([word,sub],{opacity:0,y:60,scale:0.94});ft(h.logo+0.3,[word,sub],{opacity:0},{opacity:1,duration:0.12,stagger:0.06,ease:'none'});ft(h.logo+0.3,[word,sub],{y:60,scale:0.94},{y:0,scale:1,duration:0.6,stagger:0.06,ease:'expo.out'});
 gsap.set(glyph,{scale:0.6,opacity:0,y:30});
 ft(h.logo+0.35,glyph,{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,duration:0.6,ease:'back.out(1.7)'});
 const gIn=glyph.querySelector('#gIn');const gRays=[...glyph.querySelectorAll('#gRays line')];
 const gL=l=>Math.hypot(l.x2.baseVal.value-l.x1.baseVal.value,l.y2.baseVal.value-l.y1.baseVal.value);
 draw(h.logo+0.65,gIn,gL(gIn),0.25,'power2.in');
 gRays.forEach((l,i)=>draw(h.logo+0.85+i*0.06,l,gL(l),0.4,'power3.out'));
-gsap.set(tag,{clipPath:'inset(0% 0% 100% 0%)',y:30});
-ft(h.tagline,tag,{clipPath:'inset(0% 0% 100% 0%)',y:30},{clipPath:'inset(0% 0% 0% 0%)',y:0,duration:0.6,ease:'power3.out'});
+gsap.set(tag,{opacity:0,y:30});ft(h.tagline,tag,{opacity:0,y:30},{opacity:1,y:0,duration:0.5,ease:'power3.out'});
 gsap.set(url,{opacity:0,y:20});ft(h.url,url,{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:'power3.out'});
 gsap.set(cta,{opacity:0,scale:0.7});ft(h.cta,cta,{opacity:0,scale:0.7},{opacity:1,scale:1,duration:0.6,ease:'back.out(2)'});
 // the end keeps breathing to the last frame
